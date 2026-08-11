@@ -29,27 +29,62 @@ Backend API untuk aplikasi manajemen tugas & proyek (mirip Trello/Asana versi se
 
 ## Prerequisites
 
-- Node.js v18+
-- MySQL 8.0+
-- npm atau yarn
+- **Node.js v18+** — Download dari [nodejs.org](https://nodejs.org/)
+- **MySQL 8.0+** — Sudah running di `localhost:3306`
+- **npm** atau **yarn** — Biasanya sudah terinstall dengan Node.js
 
-## Cara Install
+### Verifikasi Instalasi
 
 ```bash
-# 1. Clone repository
-git clone https://github.com/yourusername/task-project-management-api.git
+# Cek Node.js
+node --version
+
+# Cek npm
+npm --version
+
+# Cek MySQL (pastikan MySQL service berjalan)
+mysql --version
+```
+
+---
+
+## Cara Install (Step-by-Step)
+
+### 1️⃣ Clone Repository
+
+```bash
+# Gunakan SSH
+git clone git@github.com:Salman-artz/task-project-management-api.git
 cd task-project-management-api
 
-# 2. Install dependencies
-npm install
+# Atau gunakan HTTPS
+git clone https://github.com/Salman-artz/task-project-management-api.git
+cd task-project-management-api
+```
 
-# 3. Copy environment variables
+### 2️⃣ Install Dependencies
+
+```bash
+npm install
+```
+
+Ini akan menginstall semua package yang didefinisikan di `package.json` (Express, Sequelize, JWT, Socket.io, dll).
+
+### 3️⃣ Setup Environment Variables
+
+```bash
+# Copy .env.example menjadi .env
 cp .env.example .env
 ```
 
-## Setup Database
+Atau manual:
+- Salin file `.env.example`
+- Rename menjadi `.env`
+- Edit sesuai konfigurasi lokal Anda
 
-Edit file `.env` dan sesuaikan dengan kredensial MySQL Anda:
+### 4️⃣ Konfigurasi Database
+
+Edit file `.env` dengan kredensial MySQL Anda:
 
 ```env
 DB_HOST=127.0.0.1
@@ -59,33 +94,70 @@ DB_PASSWORD=
 DB_DATABASE=task_project_db
 ```
 
-### Membuat database & menjalankan migration
+**Pastikan MySQL service sudah running!**
+
+### 5️⃣ Setup Database & Migration
 
 ```bash
-# Buat database (jika belum ada)
-npx sequelize-cli db:create
-
-# Jalankan migration
-npx sequelize-cli db:migrate
-
-# (Opsional) Seed data dummy
-npx sequelize-cli db:seed:all
-
-# Atau semua dalam satu perintah
+# Pilihan 1: Jalankan semua sekaligus
 npm run db:setup
+
+# Pilihan 2: Jalankan step-by-step
+npx sequelize-cli db:create        # Buat database
+npx sequelize-cli db:migrate       # Jalankan migration
+npx sequelize-cli db:seed:all      # (Opsional) Tambah data dummy
 ```
+
+**Output yang diharapkan:**
+```
+✓ Database 'task_project_db' created
+✓ Migrations applied successfully
+✓ Seeds inserted
+```
+
+---
 
 ## Menjalankan Aplikasi
 
-```bash
-# Development mode (dengan auto-reload)
-npm run dev
+### 🚀 Development Mode (dengan Auto-Reload)
 
-# Production mode
+```bash
+npm run dev
+```
+
+**Output yang diharapkan:**
+```
+Server running on http://localhost:3000
+Database connected
+✓ Ready for requests
+```
+
+Aplikasi akan **auto-reload** jika ada perubahan kode.
+
+### 📦 Production Mode
+
+```bash
 npm start
 ```
 
-Server akan berjalan di `http://localhost:3000`
+Server akan berjalan di `http://localhost:3000` tanpa auto-reload.
+
+### 🧪 Testing
+
+```bash
+npm test
+```
+
+---
+
+## Troubleshooting
+
+| Error | Solusi |
+|-------|--------|
+| **"Port 3000 already in use"** | Ubah `APP_PORT` di `.env` atau kill process yang menggunakan port 3000 |
+| **"Unable to connect to database"** | Pastikan MySQL service running dan kredensial `.env` benar |
+| **"EACCES: permission denied"** | Jalankan dengan `sudo` atau ubah permission folder |
+| **"Module not found"** | Jalankan `npm install` ulang atau hapus `node_modules` dan jalankan `npm install` lagi |
 
 ## Environment Variables
 
