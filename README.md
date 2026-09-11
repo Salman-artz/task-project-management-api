@@ -1,271 +1,169 @@
 # Task & Project Management API
 
-Backend API untuk aplikasi manajemen tugas & proyek (mirip Trello/Asana versi sederhana). Dibangun dengan Node.js, Express, MySQL, dan Sequelize ORM.
+REST API untuk manajemen workspace, project, task, dan kolaborasi tim. Project ini merupakan backend aplikasi task management sederhana seperti Trello atau Asana, dibangun dengan Node.js, Express, TypeScript, Sequelize, dan MySQL.
 
 ## Fitur
 
-- **Autentikasi JWT** — Register, login, refresh token, ganti password
-- **Multi-Workspace** — Buat workspace, invite member, atur role
-- **Manajemen Project** — CRUD project dengan status (active, archived, completed)
-- **Manajemen Task** — CRUD task dengan status, prioritas, due date, filter & search
-- **Assignment** — Assign task ke multiple user (many-to-many)
-- **Komentar** — Komentar pada task
-- **Attachment** — Upload attachment pada task
-- **Activity Log** — Audit trail untuk setiap perubahan
-- **Role-based Access Control** — Owner, Admin, Member, Viewer
-- **Real-time (Socket.io)** — Update real-time saat task berubah (opsional)
+- Register, login, refresh token, profile, dan ganti password
+- Multi-workspace dengan invite member dan pengaturan role
+- Role-based access control: Owner, Admin, Member, dan Viewer
+- CRUD project dengan status active, archived, dan completed
+- CRUD task dengan status, prioritas, due date, filter, dan pencarian
+- Assignment task ke banyak user
+- Komentar dan attachment pada task
+- Activity log untuk audit perubahan workspace dan project
+- Update task real-time menggunakan Socket.io
+- Upload attachment melalui Cloudinary secara opsional
+- Dokumentasi API menggunakan Swagger UI
 
 ## Tech Stack
 
-| Layer | Teknologi |
-|---|---|
-| Runtime | Node.js + Express.js |
+| Area | Teknologi |
+| --- | --- |
+| Runtime | Node.js dan Express 5 |
+| Language | TypeScript |
 | Database | MySQL |
-| ORM | Sequelize |
-| Auth | JWT (jsonwebtoken) + bcryptjs |
-| Validasi | express-validator |
+| ORM | Sequelize 6 |
+| Authentication | JWT dan bcryptjs |
+| Validation | express-validator |
 | Real-time | Socket.io |
 | File storage | Cloudinary (opsional) |
+| Testing | Jest dan Supertest |
 
-## Prerequisites
+## Prasyarat
 
-- **Node.js v18+** — Download dari [nodejs.org](https://nodejs.org/)
-- **MySQL 8.0+** — Sudah running di `localhost:3306`
-- **npm** atau **yarn** — Biasanya sudah terinstall dengan Node.js
+- Node.js 18 atau lebih baru
+- npm
+- MySQL 8 atau kompatibel
+- Cloudinary jika upload attachment digunakan
 
-### Verifikasi Instalasi
-
-```bash
-# Cek Node.js
-node --version
-
-# Cek npm
-npm --version
-
-# Cek MySQL (pastikan MySQL service berjalan)
-mysql --version
-```
-
----
-
-## Cara Install (Step-by-Step)
-
-### 1️⃣ Clone Repository
+## Instalasi
 
 ```bash
-# Gunakan SSH
 git clone git@github.com:Salman-artz/task-project-management-api.git
 cd task-project-management-api
-
-# Atau gunakan HTTPS
-git clone https://github.com/Salman-artz/task-project-management-api.git
-cd task-project-management-api
-```
-
-### 2️⃣ Install Dependencies
-
-```bash
 npm install
 ```
 
-Ini akan menginstall semua package yang didefinisikan di `package.json` (Express, Sequelize, JWT, Socket.io, dll).
-
-### 3️⃣ Setup Environment Variables
+Salin `.env.example` menjadi `.env`, kemudian sesuaikan konfigurasi database, JWT, CORS, dan Cloudinary.
 
 ```bash
-# Copy .env.example menjadi .env
-cp .env.example .env
+copy .env.example .env
 ```
 
-Atau manual:
-- Salin file `.env.example`
-- Rename menjadi `.env`
-- Edit sesuai konfigurasi lokal Anda
+## Environment Variables
 
-### 4️⃣ Konfigurasi Database
+| Variable | Keterangan |
+| --- | --- |
+| `APP_PORT` | Port server, default `3000` |
+| `NODE_ENV` | Environment aplikasi |
+| `DB_HOST`, `DB_PORT` | Host dan port MySQL |
+| `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE` | Kredensial dan nama database |
+| `JWT_SECRET` | Secret access token |
+| `JWT_REFRESH_SECRET` | Secret refresh token |
+| `JWT_EXPIRES_IN` | Masa berlaku access token |
+| `JWT_REFRESH_EXPIRES_IN` | Masa berlaku refresh token |
+| `CORS_ORIGIN` | Origin frontend yang diizinkan |
+| `CLOUDINARY_CLOUD_NAME` | Nama cloud Cloudinary |
+| `CLOUDINARY_API_KEY` | API key Cloudinary |
+| `CLOUDINARY_API_SECRET` | API secret Cloudinary |
 
-Edit file `.env` dengan kredensial MySQL Anda:
+## Database
 
-```env
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_USERNAME=root
-DB_PASSWORD=
-DB_DATABASE=task_project_db
-```
-
-**Pastikan MySQL service sudah running!**
-
-### 5️⃣ Setup Database & Migration
+Setup database, migration, dan seed sekaligus:
 
 ```bash
-# Pilihan 1: Jalankan semua sekaligus
 npm run db:setup
-
-# Pilihan 2: Jalankan step-by-step
-npx sequelize-cli db:create        # Buat database
-npx sequelize-cli db:migrate       # Jalankan migration
-npx sequelize-cli db:seed:all      # (Opsional) Tambah data dummy
 ```
 
-**Output yang diharapkan:**
+Atau jalankan secara terpisah:
+
+```bash
+npx sequelize-cli db:create
+npm run migrate
+npm run seed
 ```
-✓ Database 'task_project_db' created
-✓ Migrations applied successfully
-✓ Seeds inserted
+
+Undo migration atau seed:
+
+```bash
+npm run migrate:undo
+npm run seed:undo
 ```
 
----
+## Menjalankan Project
 
-## Menjalankan Aplikasi
-
-### 🚀 Development Mode (dengan Auto-Reload)
+Development dengan auto-reload:
 
 ```bash
 npm run dev
 ```
 
-**Output yang diharapkan:**
-```
-Server running on http://localhost:3000
-Database connected
-✓ Ready for requests
-```
-
-Aplikasi akan **auto-reload** jika ada perubahan kode.
-
-### 📦 Production Mode
+Production:
 
 ```bash
 npm start
 ```
 
-Server akan berjalan di `http://localhost:3000` tanpa auto-reload.
-
-### 🧪 Testing
+Testing:
 
 ```bash
 npm test
 ```
 
----
+Server default berjalan di `http://localhost:3000`.
 
-## Troubleshooting
+## Endpoint Utama
 
-| Error | Solusi |
-|-------|--------|
-| **"Port 3000 already in use"** | Ubah `APP_PORT` di `.env` atau kill process yang menggunakan port 3000 |
-| **"Unable to connect to database"** | Pastikan MySQL service running dan kredensial `.env` benar |
-| **"EACCES: permission denied"** | Jalankan dengan `sudo` atau ubah permission folder |
-| **"Module not found"** | Jalankan `npm install` ulang atau hapus `node_modules` dan jalankan `npm install` lagi |
+Base path API: `/api/v1`
 
-## Environment Variables
+| Modul | Endpoint |
+| --- | --- |
+| Auth | `/auth/register`, `/auth/login`, `/auth/refresh-token`, `/auth/me` |
+| Workspace | `/workspaces`, `/workspaces/:id/invite`, `/workspaces/:id/members/:userId` |
+| Project | `/workspaces/:id/projects`, `/projects/:id` |
+| Task | `/projects/:id/tasks`, `/tasks/:id`, `/tasks/:id/assignees` |
+| Collaboration | `/tasks/:id/comments`, `/tasks/:id/attachments` |
+| Activity | `/workspaces/:id/activity-log`, `/projects/:id/activity-log` |
+| Health | `/health` |
 
-| Variable | Default | Description |
-|---|---|---|
-| `APP_PORT` | 3000 | Port server |
-| `NODE_ENV` | development | Environment |
-| `DB_HOST` | 127.0.0.1 | Host database |
-| `DB_PORT` | 3306 | Port database |
-| `DB_USERNAME` | root | Username database |
-| `DB_PASSWORD` | (empty) | Password database |
-| `DB_DATABASE` | task_project_db | Nama database |
-| `JWT_SECRET` | (required) | Secret key untuk JWT |
-| `JWT_EXPIRES_IN` | 15m | Expiry access token |
-| `JWT_REFRESH_SECRET` | (required) | Secret key untuk refresh token |
-| `JWT_REFRESH_EXPIRES_IN` | 7d | Expiry refresh token |
-| `CORS_ORIGIN` | * | Origin CORS yang diizinkan |
+Request yang membutuhkan autentikasi menggunakan header:
 
-## API Endpoints
-
-### Autentikasi
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| POST | `/api/v1/auth/register` | Register user baru | No |
-| POST | `/api/v1/auth/login` | Login | No |
-| POST | `/api/v1/auth/refresh-token` | Refresh access token | No |
-| GET | `/api/v1/auth/me` | Get profile | Yes |
-| PATCH | `/api/v1/auth/me` | Update profile | Yes |
-| POST | `/api/v1/auth/change-password` | Ganti password | Yes |
-
-### Workspace
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/v1/workspaces` | List workspace user | Yes |
-| POST | `/api/v1/workspaces` | Buat workspace | Yes |
-| GET | `/api/v1/workspaces/:id` | Detail workspace | Yes |
-| PATCH | `/api/v1/workspaces/:id` | Update workspace | Yes |
-| DELETE | `/api/v1/workspaces/:id` | Hapus workspace | Yes |
-| POST | `/api/v1/workspaces/:id/invite` | Invite member | Yes |
-| PATCH | `/api/v1/workspaces/:id/members/:userId` | Ubah role member | Yes |
-| DELETE | `/api/v1/workspaces/:id/members/:userId` | Hapus member | Yes |
-
-### Project
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/v1/workspaces/:id/projects` | List project | Yes |
-| POST | `/api/v1/workspaces/:id/projects` | Buat project | Yes |
-| GET | `/api/v1/projects/:id` | Detail project | Yes |
-| PATCH | `/api/v1/projects/:id` | Update project | Yes |
-| DELETE | `/api/v1/projects/:id` | Hapus project | Yes |
-
-### Task
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/v1/projects/:id/tasks?status=&priority=&assignee=&search=` | Filter tasks | Yes |
-| POST | `/api/v1/projects/:id/tasks` | Buat task | Yes |
-| GET | `/api/v1/tasks/:id` | Detail task + comments + attachments | Yes |
-| PATCH | `/api/v1/tasks/:id` | Update task | Yes |
-| DELETE | `/api/v1/tasks/:id` | Hapus task | Yes |
-| POST | `/api/v1/tasks/:id/assignees` | Assign users | Yes |
-| POST | `/api/v1/tasks/:id/comments` | Tambah komentar | Yes |
-| POST | `/api/v1/tasks/:id/attachments` | Tambah attachment | Yes |
-
-### Activity Log
-
-| Method | Endpoint | Description | Auth |
-|---|---|---|---|
-| GET | `/api/v1/workspaces/:id/activity-log` | Log aktivitas workspace | Yes |
-| GET | `/api/v1/projects/:id/activity-log` | Log aktivitas project | Yes |
-
-### Health
-
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/v1/health` | Health check |
-
-## Struktur Folder
-
+```text
+Authorization: Bearer <access-token>
 ```
+
+## Struktur Project
+
+```text
 src/
-├── config/           # Konfigurasi database
-├── controllers/      # Controller (request handling)
-├── database/
-│   ├── migrations/   # Migration files (9 tabel)
-│   ├── models/       # Sequelize models
-│   └── seeders/      # Data dummy
-├── middlewares/       # Auth, error handler
-├── routes/           # Route definitions
-├── services/         # Business logic
-├── utils/            # Helper, response formatter, custom errors
-├── validators/       # Input validation rules
-└── index.js          # Entry point
+  config/          Konfigurasi database dan environment
+  controllers/     Handler request API
+  database/        Sequelize models, migrations, dan seeders
+  middlewares/     Authentication dan error handling
+  routes/          Definisi endpoint
+  services/        Business logic
+  utils/           Helper dan formatter response
+  validators/      Aturan validasi request
+  index.js         Entry point server
+tests/             Integration dan API tests
+scripts/           Script maintenance
 ```
 
-## Data Dummy
+## Akun Seed
 
-Seeder yang tersedia (password semua user: `password123`):
+Seeder menyediakan akun demo dengan password `password123`:
 
-| Email | Role | Deskripsi |
-|---|---|---|
-| owner@example.com | Owner | Pemilik workspace |
-| admin@example.com | Admin | Admin workspace |
-| member@example.com | Member | Anggota biasa |
-| viewer@example.com | Viewer | Akses read-only |
+| Email | Role |
+| --- | --- |
+| `owner@example.com` | Owner |
+| `admin@example.com` | Admin |
+| `member@example.com` | Member |
+| `viewer@example.com` | Viewer |
+
+## Repository
+
+https://github.com/Salman-artz/task-project-management-api
 
 ## License
 
