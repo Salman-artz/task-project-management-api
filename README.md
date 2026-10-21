@@ -2,6 +2,18 @@
 
 REST API untuk manajemen workspace, project, task, dan kolaborasi tim. Project ini merupakan backend aplikasi task management sederhana seperti Trello atau Asana, dibangun dengan Node.js, Express, TypeScript, Sequelize, dan MySQL.
 
+---
+
+## 📸 Dokumentasi Interaktif API (Swagger UI / OpenAPI)
+
+<p align="center">
+  <img src="screenshots/foto4_dokumentasi_api_swagger.png" alt="Dokumentasi Swagger API" width="90%" />
+  <br/>
+  <em>Swagger UI Interaktif untuk Eksplorasi Endpoint REST API, Autentikasi JWT, & Testing Schema</em>
+</p>
+
+---
+
 ## Fitur
 
 - Register, login, refresh token, profile, dan ganti password
