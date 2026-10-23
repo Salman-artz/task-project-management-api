@@ -1,182 +1,170 @@
-# Task & Project Management API
+<div align="center">
 
-REST API untuk manajemen workspace, project, task, dan kolaborasi tim. Project ini merupakan backend aplikasi task management sederhana seperti Trello atau Asana, dibangun dengan Node.js, Express, TypeScript, Sequelize, dan MySQL.
+# ⚡ Task & Project Management REST API
+
+**Enterprise-grade REST API backend for collaborative workspace, multi-tenant projects, real-time Kanban boards, and RBAC team management.**
+
+[![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js_5-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL_8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Sequelize ORM](https://img.shields.io/badge/Sequelize_6-52B0E7?style=for-the-badge&logo=sequelize&logoColor=white)](https://sequelize.org/)
+[![Socket.io](https://img.shields.io/badge/Socket.io-010101?style=for-the-badge&logo=socket.io&logoColor=white)](https://socket.io/)
+[![Swagger](https://img.shields.io/badge/Swagger_UI-85EA2D?style=for-the-badge&logo=swagger&logoColor=black)](https://swagger.io/)
+
+</div>
 
 ---
 
-## 📸 Dokumentasi Interaktif API (Swagger UI / OpenAPI)
+## 📸 Dokumentasi & Antarmuka Terintegrasi
+
+### 📖 1. Dokumentasi Interaktif API (Swagger UI / OpenAPI)
+Eksplorasi endpoint REST API interaktif, pengujian skema data, dan otentikasi Bearer JWT langsung melalui browser:
 
 <p align="center">
   <img src="screenshots/foto4_dokumentasi_api_swagger.png" alt="Dokumentasi Swagger API" width="90%" />
-  <br/>
-  <em>Swagger UI Interaktif untuk Eksplorasi Endpoint REST API, Autentikasi JWT, & Testing Schema</em>
 </p>
 
 ---
 
-## Fitur
+<details open>
+<summary><strong>🔍 Tampilan Integrasi Frontend (Next.js 16 + Linear Theme) ▾</strong></summary>
+<br/>
 
-- Register, login, refresh token, profile, dan ganti password
-- Multi-workspace dengan invite member dan pengaturan role
-- Role-based access control: Owner, Admin, Member, dan Viewer
-- CRUD project dengan status active, archived, dan completed
-- CRUD task dengan status, prioritas, due date, filter, dan pencarian
-- Assignment task ke banyak user
-- Komentar dan attachment pada task
-- Activity log untuk audit perubahan workspace dan project
-- Update task real-time menggunakan Socket.io
-- Upload attachment melalui Cloudinary secara opsional
-- Dokumentasi API menggunakan Swagger UI
+| Modul | Preview Antarmuka |
+|---|---|
+| **Real-time Kanban Board**<br/>Pembaruan status task instan antar klien dengan Socket.io WebSocket rooms. | <img src="screenshots/kanban_board.png" alt="Kanban Board" width="460" /> |
+| **Personal Dashboard & Deadline Alerts**<br/>Agregasi metrik task across-workspaces dan deteksi deadline kritis. | <img src="screenshots/dashboard_overview.png" alt="Dashboard Ringkasan" width="460" /> |
+| **Task Detail, Comments & Attachments**<br/>Stream diskusi live, manajemen multi-assignee, dan upload file attachment. | <img src="screenshots/task_detail.png" alt="Task Detail" width="460" /> |
+| **Audit Log & Activity Feed**<br/>Pencatatan riwayat komprehensif untuk setiap mutasi status, role, atau komentar. | <img src="screenshots/activity_feed.png" alt="Activity Feed" width="460" /> |
 
-## Tech Stack
+</details>
 
-| Area | Teknologi |
+---
+
+## 🚀 Fitur Backend
+
+- **Autentikasi & Autorisasi:**
+  - Registrasi, Login, dan Logout.
+  - JWT Dual-token mechanism (Access Token & Refresh Token) dengan enkripsi `bcryptjs`.
+  - Granular RBAC (Role-Based Access Control): `Owner`, `Admin`, `Member`, dan `Viewer`.
+- **Manajemen Workspace & Multi-Tenancy:**
+  - Pembuatan workspace dan isolasi data proyek per organisasi.
+  - Sistem undangan kolaborator via email dan penyesuaian role dinamis.
+- **Manajemen Proyek & Kanban:**
+  - Status proyek (`active`, `archived`, `completed`).
+  - Pembuatan task dengan 4 status (`todo`, `in_progress`, `review`, `done`) dan 3 prioritas (`low`, `medium`, `high`).
+  - Penugasan staf ke banyak user sekaligus (*multi-assignees*).
+  - Pelacakan batas waktu (*due date*).
+- **Kolaborasi Real-Time:**
+  - Integrasi Socket.io untuk streaming komentar dan event mutasi status task real-time.
+- **Audit Logging & Activity Trail:**
+  - Histori otomatis setiap kali terjadi perubahan role, pembuatan task, pergantian status, atau penambahan komentar.
+- **Dokumentasi Terbuka:**
+  - Swagger UI / OpenAPI 3.0 terintegrasi pada endpoint `/api-docs`.
+- **Database Seeder Otomatis:**
+  - Script seeder portofolio siap pakai yang menginjeksikan data arsitektur sistem pembayaran (*Fintech Core Engineering*).
+
+---
+
+## 💻 Tech Stack
+
+| Komponen | Spesifikasi |
 | --- | --- |
-| Runtime | Node.js dan Express 5 |
-| Language | TypeScript |
-| Database | MySQL |
-| ORM | Sequelize 6 |
-| Authentication | JWT dan bcryptjs |
-| Validation | express-validator |
-| Real-time | Socket.io |
-| File storage | Cloudinary (opsional) |
-| Testing | Jest dan Supertest |
+| **Runtime & Framework** | Node.js & Express.js 5 |
+| **Database** | MySQL 8 |
+| **ORM** | Sequelize v6 |
+| **Otentikasi** | JSON Web Token (jsonwebtoken) & bcryptjs |
+| **Validasi Request** | express-validator |
+| **Real-Time** | Socket.io |
+| **File Storage** | Multer & Cloudinary (opsional) |
+| **Dokumentasi API** | swagger-ui-express & swagger-jsdoc |
 
-## Prasyarat
+---
+
+## ⚙️ Prasyarat
 
 - Node.js 18 atau lebih baru
-- npm
-- MySQL 8 atau kompatibel
-- Cloudinary jika upload attachment digunakan
+- npm / yarn / pnpm
+- MySQL Server (misal via XAMPP atau MySQL Community)
 
-## Instalasi
+---
 
-```bash
-git clone git@github.com:Salman-artz/task-project-management-api.git
-cd task-project-management-api
-npm install
-```
+## 📦 Instalasi & Setup
 
-Salin `.env.example` menjadi `.env`, kemudian sesuaikan konfigurasi database, JWT, CORS, dan Cloudinary.
+1. **Clone repository:**
+   ```bash
+   git clone git@github.com:Salman-artz/task-project-management-api.git
+   cd task-project-management-api
+   ```
 
-```bash
-copy .env.example .env
-```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-## Environment Variables
+3. **Konfigurasi Environment Variables:**
+   Salin `.env.example` ke `.env` lalu sesuaikan kredensial database:
+   ```bash
+   copy .env.example .env
+   ```
+   Contoh isi `.env`:
+   ```env
+   PORT=5000
+   NODE_ENV=development
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=
+   DB_NAME=task_project_db
 
-| Variable | Keterangan |
-| --- | --- |
-| `APP_PORT` | Port server, default `3000` |
-| `NODE_ENV` | Environment aplikasi |
-| `DB_HOST`, `DB_PORT` | Host dan port MySQL |
-| `DB_USERNAME`, `DB_PASSWORD`, `DB_DATABASE` | Kredensial dan nama database |
-| `JWT_SECRET` | Secret access token |
-| `JWT_REFRESH_SECRET` | Secret refresh token |
-| `JWT_EXPIRES_IN` | Masa berlaku access token |
-| `JWT_REFRESH_EXPIRES_IN` | Masa berlaku refresh token |
-| `CORS_ORIGIN` | Origin frontend yang diizinkan |
-| `CLOUDINARY_CLOUD_NAME` | Nama cloud Cloudinary |
-| `CLOUDINARY_API_KEY` | API key Cloudinary |
-| `CLOUDINARY_API_SECRET` | API secret Cloudinary |
+   JWT_SECRET=your_jwt_secret_key_here
+   JWT_EXPIRES_IN=1d
+   REFRESH_TOKEN_SECRET=your_refresh_secret_key_here
+   REFRESH_TOKEN_EXPIRES_IN=7d
 
-## Database
+   CLIENT_URL=http://localhost:5173
+   ```
 
-Setup database, migration, dan seed sekaligus:
+4. **Migrasi Database & Injeksi Data Portfolio:**
+   ```bash
+   # Jalankan migrasi tabel
+   npx sequelize-cli db:migrate
 
-```bash
-npm run db:setup
-```
+   # Injeksi data arsitektur portfolio siap pakai
+   node seed-portfolio.js
+   ```
 
-Atau jalankan secara terpisah:
+5. **Jalankan Server:**
+   ```bash
+   # Development mode (nodemon)
+   npm run dev
 
-```bash
-npx sequelize-cli db:create
-npm run migrate
-npm run seed
-```
+   # Production mode
+   node src/index.js
+   ```
+   API akan aktif di `http://localhost:5000` dan Swagger Docs di `http://localhost:5000/api-docs`.
 
-Undo migration atau seed:
+---
 
-```bash
-npm run migrate:undo
-npm run seed:undo
-```
+## 🔑 Akun Uji Coba (Seeded)
 
-## Menjalankan Project
+| Akun | Email | Password | Role |
+| --- | --- | --- | --- |
+| **Lead Engineer (Owner)** | `owner@example.com` | `password123` | Owner |
+| **Lead Architect (Admin)** | `admin@example.com` | `password123` | Admin |
+| **Backend Engineer (Member)**| `member@example.com` | `password123` | Member |
+| **DevOps Specialist (Member)**| `test@example.com` | `password123` | Member |
+| **QA Engineer (Viewer)** | `viewer@example.com` | `password123` | Viewer |
 
-Development dengan auto-reload:
+---
 
-```bash
-npm run dev
-```
+## 🔗 Repository Terkait
 
-Production:
+- **Frontend Repository:** [Salman-artz/task-project-management-frontend](https://github.com/Salman-artz/task-project-management-frontend)
+- **Backend API Repository:** [Salman-artz/task-project-management-api](https://github.com/Salman-artz/task-project-management-api)
 
-```bash
-npm start
-```
+---
 
-Testing:
+## 📄 Lisensi
 
-```bash
-npm test
-```
-
-Server default berjalan di `http://localhost:3000`.
-
-## Endpoint Utama
-
-Base path API: `/api/v1`
-
-| Modul | Endpoint |
-| --- | --- |
-| Auth | `/auth/register`, `/auth/login`, `/auth/refresh-token`, `/auth/me` |
-| Workspace | `/workspaces`, `/workspaces/:id/invite`, `/workspaces/:id/members/:userId` |
-| Project | `/workspaces/:id/projects`, `/projects/:id` |
-| Task | `/projects/:id/tasks`, `/tasks/:id`, `/tasks/:id/assignees` |
-| Collaboration | `/tasks/:id/comments`, `/tasks/:id/attachments` |
-| Activity | `/workspaces/:id/activity-log`, `/projects/:id/activity-log` |
-| Health | `/health` |
-
-Request yang membutuhkan autentikasi menggunakan header:
-
-```text
-Authorization: Bearer <access-token>
-```
-
-## Struktur Project
-
-```text
-src/
-  config/          Konfigurasi database dan environment
-  controllers/     Handler request API
-  database/        Sequelize models, migrations, dan seeders
-  middlewares/     Authentication dan error handling
-  routes/          Definisi endpoint
-  services/        Business logic
-  utils/           Helper dan formatter response
-  validators/      Aturan validasi request
-  index.js         Entry point server
-tests/             Integration dan API tests
-scripts/           Script maintenance
-```
-
-## Akun Seed
-
-Seeder menyediakan akun demo dengan password `password123`:
-
-| Email | Role |
-| --- | --- |
-| `owner@example.com` | Owner |
-| `admin@example.com` | Admin |
-| `member@example.com` | Member |
-| `viewer@example.com` | Viewer |
-
-## Repository
-
-https://github.com/Salman-artz/task-project-management-api
-
-## License
-
-MIT
+Distributed under the MIT License.

@@ -240,6 +240,15 @@ class TaskService {
 
     // Emit socket event
     emitToTask(taskId, 'comment:added', { comment: commentWithUser, taskId });
+    if (task.project && task.project.workspace_id) {
+      emitToWorkspace(task.project.workspace_id, 'comment:added', {
+        comment: commentWithUser,
+        taskId,
+        taskTitle: task.title,
+        projectId: task.project_id,
+        workspaceId: task.project.workspace_id,
+      });
+    }
 
     return commentWithUser;
   }
